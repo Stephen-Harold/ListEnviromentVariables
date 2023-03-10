@@ -1,0 +1,24 @@
+#!/bin/bash
+### Prints env as name:value list.
+lenv() {
+	local _clr_num=$(tput setaf 7)
+	local _clr_key=$(tput setaf 32)
+	local _clr_value=$(tput setaf 15)
+	local _bold=$(tput bold)
+	local _ustr=$(tput smul)
+	local _uend=$(tput rmul)
+	local _rst=$(tput sgr0)
+	local num=0 ## Line numbers.
+	printf "\n\r"
+	env | while read -r _val
+	do
+	:	$((++num))
+		key=${_val//=*} ## ALL Chars after the '=' sign.
+		value=${_val//*=} ## All chars after the '=' sign.
+		printf "$_clr_num%02d\x1b[36m.\033[m" $num
+		printf "\t$_clr_key%s\x1b[31m = \033[m" $key
+		printf "$_clr_value$_bold%s$_rst\n\r" $value
+	done
+	printf "\n\r"
+}
+lenv $@
